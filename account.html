@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account - Battaglie Gnomiche</title>
+    <title>Account e Camerino - Battaglie Gnomiche</title>
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="logobattagliegnomiche.png">
     
@@ -13,7 +13,7 @@
     <style>
         :root {
             --bg-dark: #07160d;
-            --container-bg: rgba(11, 38, 22, 0.85);
+            --container-bg: rgba(11, 38, 22, 0.88);
             --border-green: #1e5631;
             --accent-green: #4c9a2a;
             --accent-hover: #5ab834;
@@ -48,22 +48,22 @@
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(76, 154, 42, 0.15);
             width: 100%;
-            max-width: 420px;
+            max-width: 480px;
             padding: 35px 30px;
             text-align: center;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 75px;
+            height: 75px;
             object-fit: contain;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
         }
 
         h1 {
             font-family: 'Cinzel', serif;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--text-light);
             margin-bottom: 5px;
         }
@@ -71,7 +71,7 @@
         .subtitle {
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         /* Form e Input */
@@ -82,20 +82,20 @@
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             font-family: 'Cinzel', serif;
         }
 
         input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 11px 14px;
             background-color: rgba(7, 22, 13, 0.6);
             border: 1px solid var(--border-green);
             border-radius: 10px;
             color: var(--text-light);
-            font-size: 1rem;
+            font-size: 0.95rem;
             outline: none;
             transition: border-color 0.2s;
         }
@@ -109,7 +109,7 @@
             width: 100%;
             padding: 12px;
             font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 600;
             color: #ffffff;
             background: linear-gradient(135deg, #4c9a2a 0%, #2e6914 100%);
@@ -118,7 +118,7 @@
             box-shadow: 0 4px 10px rgba(76, 154, 42, 0.3);
             cursor: pointer;
             transition: all 0.25s ease;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .btn:hover {
@@ -127,7 +127,7 @@
         }
 
         .toggle-text {
-            margin-top: 15px;
+            margin-top: 12px;
             font-size: 0.85rem;
             color: var(--text-muted);
         }
@@ -142,15 +142,11 @@
             text-decoration: underline;
         }
 
-        /* Stato utente loggato / Messaggi */
-        #logged-in-section {
-            display: none;
-        }
-
+        /* Messaggi */
         .msg {
-            margin-top: 15px;
-            font-size: 0.85rem;
-            padding: 10px;
+            margin-top: 12px;
+            font-size: 0.8rem;
+            padding: 8px;
             border-radius: 8px;
             display: none;
         }
@@ -167,6 +163,110 @@
             border: 1px solid var(--success-color);
             color: var(--success-color);
             display: block;
+        }
+
+        /* Divisore */
+        .divider {
+            margin: 25px 0 20px 0;
+            border: none;
+            height: 1px;
+            background-color: var(--border-green);
+        }
+
+        /* SEZIONE CAMERINO (Personaggio) */
+        .dressing-room {
+            text-align: left;
+            background: rgba(5, 15, 9, 0.6);
+            border: 1px dashed var(--border-green);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .dressing-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dressing-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .character-preview-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(11, 38, 22, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .avatar-placeholder {
+            width: 50px;
+            height: 50px;
+            background-color: #1b3d24;
+            border: 1px solid var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .character-info span {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .character-info small {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Griglia scelta gnomi (anteprima placeholder) */
+        .gnome-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .gnome-slot {
+            aspect-ratio: 1;
+            background: rgba(27, 61, 36, 0.4);
+            border: 1px solid var(--border-green);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gnome-slot:hover {
+            border-color: var(--accent-green);
+            background: rgba(76, 154, 42, 0.2);
+            transform: scale(1.05);
+        }
+
+        .gnome-slot.selected {
+            border-color: #62c436;
+            background: rgba(76, 154, 42, 0.4);
+            box-shadow: 0 0 8px rgba(76, 154, 42, 0.5);
+        }
+
+        #logged-in-controls {
+            display: none;
         }
 
         .back-link {
@@ -187,7 +287,7 @@
     <div class="main-container">
         <img src="logobattagliegnomiche.png" alt="Logo" class="logo">
         
-        <!-- SEZIONE FORM (Login / Registrazione) -->
+        <!-- SEZIONE AUTH (Login / Registrazione) -->
         <div id="auth-section">
             <h1 id="form-title">Registrazione</h1>
             <p class="subtitle" id="form-subtitle">Crea il tuo gnomo per entrare in battaglia</p>
@@ -211,25 +311,51 @@
             </div>
         </div>
 
-        <!-- SEZIONE UTENTE LOGGATO (Gestione Account & Avatar) -->
-        <div id="logged-in-section">
-            <h1>Il tuo Gnomo</h1>
+        <!-- SEZIONE UTENTE LOGGATO (Gestione Profilo Base) -->
+        <div id="logged-in-controls" style="display: none;">
+            <h1>Area Personale</h1>
             <p class="subtitle">Bentornato, <span id="display-username" style="color: var(--accent-green); font-weight: bold;"></span>!</p>
-            
             <div id="logged-alert" class="msg"></div>
-
+            
             <div class="form-group">
-                <label for="new-avatar">URL Avatar / Immagine</label>
-                <input type="text" id="new-avatar" placeholder="https://esempio.com/avatar.png">
+                <label for="new-avatar">URL Avatar Personalizzato</label>
+                <input type="text" id="new-avatar" placeholder="https://esempio.com/tuo-avatar.png">
             </div>
-            <button type="button" class="btn" id="save-profile-btn">Salva Profilo</button>
-            <button type="button" class="btn" id="logout-btn" style="background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%); border-color: #b22222; margin-top: 10px;">Esci</button>
+            <button type="button" class="btn" id="save-profile-btn" style="margin-top: 5px;">Salva Avatar</button>
+            <button type="button" class="btn" id="logout-btn" style="background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%); border-color: #b22222; margin-top: 8px;">Esci dall'Account</button>
+        </div>
+
+        <hr class="divider">
+
+        <!-- SEZIONE CAMERINO (Scelta Personaggio) -->
+        <div class="dressing-room">
+            <div class="dressing-title">
+                <span>Camerino Gnomico</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">[Presto attivo]</span>
+            </div>
+            <p class="dressing-desc">Personalizza il tuo gnomo, equipaggia armature e scegli il tuo aspetto per il campo di battaglia.</p>
+            
+            <div class="character-preview-box">
+                <div class="avatar-placeholder">🛡️</div>
+                <div class="character-info" style="text-align: left;">
+                    <span id="preview-name">Gnomo Standard</span>
+                    <small>Classe: Recluta / Base</small>
+                </div>
+            </div>
+
+            <!-- Griglia futura per la selezione dei personaggi/skin -->
+            <div class="gnome-grid">
+                <div class="gnome-slot selected" title="Gnomo Base">🪖</div>
+                <div class="gnome-slot" title="Gnomo Guerriero">⚔️</div>
+                <div class="gnome-slot" title="Gnomo Mago">🔮</div>
+                <div class="gnome-slot" title="Gnomo Mercante">💰</div>
+            </div>
         </div>
 
         <a href="index.html" class="back-link">&larr; Torna alla Home</a>
     </div>
 
-    <!-- Script JavaScript con Firebase -->
+    <!-- Script JavaScript Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
@@ -244,11 +370,9 @@
             doc, 
             setDoc, 
             getDoc, 
-            updateFromServer, 
             updateDoc 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configurazione Firebase dal tuo progetto
         const firebaseConfig = {
             apiKey: "AIzaSyBJHChFOVuJBIjtG4y4HxNSrMJqSgiTvo0",
             authDomain: "battaglie-gnomiche.firebaseapp.com",
@@ -263,9 +387,8 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Elementi DOM
         const authSection = document.getElementById("auth-section");
-        const loggedInSection = document.getElementById("logged-in-section");
+        const loggedInControls = document.getElementById("logged-in-controls");
         const authForm = document.getElementById("auth-form");
         const formTitle = document.getElementById("form-title");
         const formSubtitle = document.getElementById("form-subtitle");
@@ -275,23 +398,20 @@
         const alertBox = document.getElementById("alert-box");
         const loggedAlert = document.getElementById("logged-alert");
         const displayUsername = document.getElementById("display-username");
+        const previewName = document.getElementById("preview-name");
         const newAvatarInput = document.getElementById("new-avatar");
         const saveProfileBtn = document.getElementById("save-profile-btn");
         const logoutBtn = document.getElementById("logout-btn");
 
         let isLoginMode = false;
 
-        // Funzione per mostrare errori o successi
         function showAlert(message, type = "error", isLoggedArea = false) {
             const box = isLoggedArea ? loggedAlert : alertBox;
             box.textContent = message;
             box.className = `msg ${type}`;
-            setTimeout(() => {
-                box.className = "msg";
-            }, 4000);
+            setTimeout(() => { box.className = "msg"; }, 4000);
         }
 
-        // Cambia tra Registrazione e Accesso
         switchMode.addEventListener("click", (e) => {
             e.preventDefault();
             isLoginMode = !isLoginMode;
@@ -306,31 +426,23 @@
                 submitBtn.textContent = "Registrati";
                 toggleContainer.innerHTML = 'Hai già un account? <a href="#" id="switch-mode">Accedi</a>';
             }
-            // Riattacca l'evento al nuovo link generato dinamicamente
             document.getElementById("switch-mode").addEventListener("click", arguments.callee);
         });
 
-        // Gestione Invio Form (Registrazione / Login)
         authForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             const nickname = document.getElementById("nickname").value.trim();
             const password = document.getElementById("password").value;
-
-            // Trasformiamo il nickname in email univoca per Firebase Auth
-            // Sostituiamo gli spazi con underscore per evitare errori
             const formattedNickname = nickname.toLowerCase().replace(/\s+/g, '_');
             const fakeEmail = `${formattedNickname}@battagliegnomiche.local`;
 
             try {
                 if (isLoginMode) {
-                    // Login
                     await signInWithEmailAndPassword(auth, fakeEmail, password);
                 } else {
-                    // Registrazione
                     const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, password);
                     const user = userCredential.user;
 
-                    // Creazione del documento utente su Firestore
                     await setDoc(doc(db, "users", user.uid), {
                         username: nickname,
                         avatarUrl: "",
@@ -343,67 +455,66 @@
                 console.error(error);
                 let errorMsg = "Errore durante l'operazione.";
                 if (error.code === 'auth/email-already-in-use') errorMsg = "Questo nickname è già occupato!";
-                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') errorMsg = "Nickname o password errati.";
+                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') errorMsg = "Nickname o password errati.";
                 if (error.code === 'auth/weak-password') errorMsg = "La password deve essere di almeno 6 caratteri.";
                 showAlert(errorMsg, "error");
             }
         });
 
-        // Monitoraggio dello stato di autenticazione (Login/Logout automatico)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Utente loggato: recuperiamo i dati da Firestore
                 authSection.style.display = "none";
-                loggedInSection.style.display = "block";
+                loggedInControls.style.display = "block";
 
                 try {
-                    const userDocRef = doc(db, "users", user.uid);
-                    const userDoc = await getDoc(userDocRef);
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
                     if (userDoc.exists()) {
                         const userData = userDoc.data();
-                        
-                        // Controllo se l'utente è bannato
                         if (userData.isBanned) {
                             alert("Il tuo account è stato bannato.");
                             await signOut(auth);
                             return;
                         }
-
                         displayUsername.textContent = userData.username;
+                        previewName.textContent = userData.username;
                         newAvatarInput.value = userData.avatarUrl || "";
                     }
                 } catch (err) {
-                    console.error("Errore nel recupero dati utente:", err);
+                    console.error("Errore recupero utente:", err);
                 }
             } else {
-                // Utente non loggato
                 authSection.style.display = "block";
-                loggedInSection.style.display = "none";
+                loggedInControls.style.display = "none";
+                previewName.textContent = "Gnomo Standard";
             }
         });
 
-        // Salvataggio Profilo (Avatar)
         saveProfileBtn.addEventListener("click", async () => {
             const user = auth.currentUser;
             if (!user) return;
 
-            const newAvatar = newAvatarInput.value.trim();
-
             try {
                 const userDocRef = doc(db, "users", user.uid);
                 await updateDoc(userDocRef, {
-                    avatarUrl: newAvatar
+                    avatarUrl: newAvatarInput.value.trim()
                 });
-                showAlert("Profilo aggiornato con successo!", "success", true);
+                showAlert("Avatar aggiornato con successo!", "success", true);
             } catch (err) {
                 console.error(err);
                 showAlert("Errore durante il salvataggio.", "error", true);
             }
         });
 
-        // Tasto Logout
         logoutBtn.addEventListener("click", () => {
             signOut(auth);
+        });
+
+        // Interattività visiva temporanea per la griglia del camerino
+        document.querySelectorAll('.gnome-slot').forEach(slot => {
+            slot.addEventListener('click', () => {
+                document.querySelectorAll('.gnome-slot').forEach(s => s.classList.remove('selected'));
+                slot.classList.add('selected');
+            });
         });
     </script>
 </body>
