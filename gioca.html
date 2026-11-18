@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gioca - Battaglie Gnomiche</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logobattagliegnomiche.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #07160d;
+            --container-bg: rgba(11, 38, 22, 0.88);
+            --border-green: #1e5631;
+            --accent-green: #4c9a2a;
+            --accent-hover: #5ab834;
+            --text-light: #e8f5e9;
+            --text-muted: #a5d6a7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at center, #113820 0%, var(--bg-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .main-container {
+            background-color: var(--container-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--border-green);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 20px rgba(76, 154, 42, 0.15);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 30px;
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 16px 20px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: #ffffff;
+            background: linear-gradient(135deg, #4c9a2a 0%, #2e6914 100%);
+            border: 1px solid #62c436;
+            border-radius: 12px;
+            box-shadow: 0 6px 15px rgba(76, 154, 42, 0.3);
+            transition: all 0.25s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            filter: brightness(1.15);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .back-link:hover {
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <img src="logobattagliegnomiche.png" alt="Logo Battaglie Gnomiche" class="logo">
+        
+        <h1>Arena di Battaglia</h1>
+        <p class="subtitle">Scegli la modalità di gioco</p>
+
+        <div class="menu-buttons">
+            <a href="multiplayer.html" class="btn">Multiplayer</a>
+        </div>
+
+        <a href="index.html" class="back-link">&larr; Torna alla Home</a>
+    </div>
+
+</body>
+</html>
