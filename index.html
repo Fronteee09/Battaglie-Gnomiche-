@@ -30,7 +30,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
-            /* Sfumatura e atmosfera da foresta scura/aerea */
             background-image: radial-gradient(circle at center, #113820 0%, var(--bg-dark) 100%);
             color: var(--text-light);
             min-height: 100vh;
@@ -56,12 +55,12 @@
         }
 
         .logo-container {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .logo {
-            width: 120px;
-            height: 120px;
+            width: 110px;
+            height: 110px;
             object-fit: contain;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
             transition: transform 0.3s ease;
@@ -75,7 +74,7 @@
             font-family: 'Cinzel', serif;
             font-size: 1.8rem;
             color: var(--text-light);
-            margin-bottom: 8px;
+            margin-bottom: 5px;
             letter-spacing: 1px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
@@ -83,7 +82,25 @@
         .subtitle {
             font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 35px;
+            margin-bottom: 25px;
+        }
+
+        /* Box di benvenuto dinamico per l'utente loggato */
+        #user-welcome-box {
+            display: none;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(7, 22, 13, 0.5);
+            border: 1px dashed var(--accent-green);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        #user-welcome-box span {
+            color: var(--accent-green);
+            font-weight: bold;
         }
 
         .menu-buttons {
@@ -129,15 +146,13 @@
             transform: translateY(1px);
         }
 
-        /* Footer discreto */
         .footer-text {
-            margin-top: 30px;
+            margin-top: 25px;
             font-size: 0.75rem;
             color: var(--text-muted);
             opacity: 0.7;
         }
 
-        /* Adattamento per schermi molto piccoli */
         @media (max-width: 480px) {
             .main-container {
                 padding: 30px 20px;
@@ -159,10 +174,15 @@
         <h1>Battaglie Gnomiche</h1>
         <p class="subtitle">Combatti, scambia e conquista il regno</p>
 
-        <!-- Menu con i tasti richiesti -->
+        <!-- Messaggio di benvenuto se l'utente ha fatto il login -->
+        <div id="user-welcome-box">
+            Bentornato, <span id="home-username">Gnomo</span>!
+        </div>
+
+        <!-- Menu con i tasti -->
         <div class="menu-buttons">
             <a href="gioca.html" class="btn primary">Gioca</a>
-            <a href="account.html" class="btn">Account / Avatar</a>
+            <a href="account.html" class="btn" id="account-btn">Account / Avatar</a>
             <a href="impostazioni.html" class="btn">Impostazioni</a>
         </div>
 
@@ -170,6 +190,51 @@
             &copy; Battaglie Gnomiche - GitHub Edition
         </div>
     </div>
+
+    <!-- Script Firebase per controllare lo stato dell'utente nella Home -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJHChFOVuJBIjtG4y4HxNSrMJqSgiTvo0",
+            authDomain: "battaglie-gnomiche.firebaseapp.com",
+            projectId: "battaglie-gnomiche",
+            storageBucket: "battaglie-gnomiche.firebasestorage.app",
+            messagingSenderId: "991921148764",
+            appId: "1:991921148764:web:8cf3c3a2b41418cdbce799",
+            measurementId: "G-S4SWMGVPWN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const userWelcomeBox = document.getElementById("user-welcome-box");
+        const homeUsername = document.getElementById("home-username");
+        const accountBtn = document.getElementById("account-btn");
+
+        // Controlla se l'utente è loggato
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    const userDoc = await getDoc(doc(db, "users", user.uid));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        homeUsername.textContent = data.username;
+                        userWelcomeBox.style.display = "block";
+                        accountBtn.textContent = "Gestisci Account";
+                    }
+                } catch (err) {
+                    console.error("Errore recupero utente in home:", err);
+                }
+            } else {
+                userWelcomeBox.style.display = "none";
+                accountBtn.textContent = "Account / Avatar";
+            }
+        });
+    </script>
 
 </body>
 </html>
