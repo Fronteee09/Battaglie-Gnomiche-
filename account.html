@@ -173,7 +173,7 @@
             background-color: var(--border-green);
         }
 
-        /* SEZIONE CAMERINO (Personaggio) */
+        /* SEZIONE CAMERINO */
         .dressing-room {
             text-align: left;
             background: rgba(5, 15, 9, 0.6);
@@ -188,81 +188,61 @@
             font-size: 1.1rem;
             color: var(--accent-green);
             margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
         .dressing-desc {
             font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
 
-        .character-preview-box {
+        /* Selezione Avatar con immagini reali */
+        .avatar-choice-container {
             display: flex;
-            align-items: center;
             gap: 15px;
-            background: rgba(11, 38, 22, 0.5);
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-
-        .avatar-placeholder {
-            width: 50px;
-            height: 50px;
-            background-color: #1b3d24;
-            border: 1px solid var(--accent-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
+            margin-bottom: 15px;
         }
 
-        .character-info span {
-            display: block;
-            font-size: 0.85rem;
-            color: var(--text-light);
-        }
-
-        .character-info small {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-        }
-
-        /* Griglia scelta gnomi (anteprima placeholder) */
-        .gnome-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .gnome-slot {
-            aspect-ratio: 1;
-            background: rgba(27, 61, 36, 0.4);
-            border: 1px solid var(--border-green);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+        .avatar-card {
+            flex: 1;
+            background: rgba(11, 38, 22, 0.6);
+            border: 2px solid var(--border-green);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
-        .gnome-slot:hover {
+        .avatar-card:hover {
             border-color: var(--accent-green);
-            background: rgba(76, 154, 42, 0.2);
-            transform: scale(1.05);
+            transform: translateY(-2px);
         }
 
-        .gnome-slot.selected {
+        .avatar-card.selected {
             border-color: #62c436;
-            background: rgba(76, 154, 42, 0.4);
-            box-shadow: 0 0 8px rgba(76, 154, 42, 0.5);
+            background: rgba(76, 154, 42, 0.25);
+            box-shadow: 0 0 10px rgba(76, 154, 42, 0.4);
+        }
+
+        .avatar-img-preview {
+            width: 55px;
+            height: 55px;
+            object-fit: contain;
+            border-radius: 50%;
+            margin: 0 auto 8px auto;
+            display: block;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            padding: 2px;
+        }
+
+        .avatar-card span {
+            font-size: 0.85rem;
+            font-family: 'Cinzel', serif;
+            color: var(--text-light);
+            font-weight: 600;
         }
 
         #logged-in-controls {
@@ -311,45 +291,36 @@
             </div>
         </div>
 
-        <!-- SEZIONE UTENTE LOGGATO (Gestione Profilo Base) -->
+        <!-- SEZIONE UTENTE LOGGATO -->
         <div id="logged-in-controls" style="display: none;">
             <h1>Area Personale</h1>
             <p class="subtitle">Bentornato, <span id="display-username" style="color: var(--accent-green); font-weight: bold;"></span>!</p>
             <div id="logged-alert" class="msg"></div>
             
-            <div class="form-group">
-                <label for="new-avatar">URL Avatar Personalizzato</label>
-                <input type="text" id="new-avatar" placeholder="https://esempio.com/tuo-avatar.png">
-            </div>
-            <button type="button" class="btn" id="save-profile-btn" style="margin-top: 5px;">Salva Avatar</button>
-            <button type="button" class="btn" id="logout-btn" style="background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%); border-color: #b22222; margin-top: 8px;">Esci dall'Account</button>
+            <button type="button" class="btn" id="logout-btn" style="background: linear-gradient(135deg, #8b0000 0%, #4a0000 100%); border-color: #b22222; margin-top: 5px;">Esci dall'Account</button>
         </div>
 
         <hr class="divider">
 
-        <!-- SEZIONE CAMERINO (Scelta Personaggio) -->
+        <!-- SEZIONE CAMERINO (Gnomo Rosso / Gnomo Verde) -->
         <div class="dressing-room">
             <div class="dressing-title">
-                <span>Camerino Gnomico</span>
-                <span style="font-size: 0.75rem; color: var(--text-muted);">[Presto attivo]</span>
+                <span>Camerino - Scegli Avatar</span>
             </div>
-            <p class="dressing-desc">Personalizza il tuo gnomo, equipaggia armature e scegli il tuo aspetto per il campo di battaglia.</p>
+            <p class="dressing-desc">Seleziona lo stile del tuo gnomo per la battaglia:</p>
             
-            <div class="character-preview-box">
-                <div class="avatar-placeholder">🛡️</div>
-                <div class="character-info" style="text-align: left;">
-                    <span id="preview-name">Gnomo Standard</span>
-                    <small>Classe: Recluta / Base</small>
+            <div class="avatar-choice-container">
+                <div class="avatar-card" data-avatar="rosso">
+                    <img src="gnomorosso.jpeg" alt="Gnomo Rosso" class="avatar-img-preview">
+                    <span>Rosso</span>
+                </div>
+                <div class="avatar-card selected" data-avatar="verde">
+                    <img src="gnomoverde.png" alt="Gnomo Verde" class="avatar-img-preview">
+                    <span>Verde</span>
                 </div>
             </div>
 
-            <!-- Griglia futura per la selezione dei personaggi/skin -->
-            <div class="gnome-grid">
-                <div class="gnome-slot selected" title="Gnomo Base">🪖</div>
-                <div class="gnome-slot" title="Gnomo Guerriero">⚔️</div>
-                <div class="gnome-slot" title="Gnomo Mago">🔮</div>
-                <div class="gnome-slot" title="Gnomo Mercante">💰</div>
-            </div>
+            <button type="button" class="btn" id="save-avatar-btn" style="margin-top: 5px;">Salva Avatar</button>
         </div>
 
         <a href="index.html" class="back-link">&larr; Torna alla Home</a>
@@ -398,11 +369,11 @@
         const alertBox = document.getElementById("alert-box");
         const loggedAlert = document.getElementById("logged-alert");
         const displayUsername = document.getElementById("display-username");
-        const previewName = document.getElementById("preview-name");
-        const newAvatarInput = document.getElementById("new-avatar");
-        const saveProfileBtn = document.getElementById("save-profile-btn");
+        const saveAvatarBtn = document.getElementById("save-avatar-btn");
         const logoutBtn = document.getElementById("logout-btn");
+        const avatarCards = document.querySelectorAll(".avatar-card");
 
+        let selectedAvatar = "verde"; // Default
         let isLoginMode = false;
 
         function showAlert(message, type = "error", isLoggedArea = false) {
@@ -411,6 +382,15 @@
             box.className = `msg ${type}`;
             setTimeout(() => { box.className = "msg"; }, 4000);
         }
+
+        // Gestione selezione visiva delle card avatar
+        avatarCards.forEach(card => {
+            card.addEventListener("click", () => {
+                avatarCards.forEach(c => c.classList.remove("selected"));
+                card.classList.add("selected");
+                selectedAvatar = card.getAttribute("data-avatar");
+            });
+        });
 
         switchMode.addEventListener("click", (e) => {
             e.preventDefault();
@@ -443,9 +423,10 @@
                     const userCredential = await createUserWithEmailAndPassword(auth, fakeEmail, password);
                     const user = userCredential.user;
 
+                    // Salvataggio iniziale con l'avatar scelto
                     await setDoc(doc(db, "users", user.uid), {
                         username: nickname,
-                        avatarUrl: "",
+                        avatar: selectedAvatar,
                         role: "player",
                         isBanned: false,
                         createdAt: new Date()
@@ -476,8 +457,18 @@
                             return;
                         }
                         displayUsername.textContent = userData.username;
-                        previewName.textContent = userData.username;
-                        newAvatarInput.value = userData.avatarUrl || "";
+                        
+                        // Imposta la grafica dell'avatar salvato
+                        if (userData.avatar) {
+                            selectedAvatar = userData.avatar;
+                            avatarCards.forEach(c => {
+                                if (c.getAttribute("data-avatar") === selectedAvatar) {
+                                    c.classList.add("selected");
+                                } else {
+                                    c.classList.remove("selected");
+                                }
+                            });
+                        }
                     }
                 } catch (err) {
                     console.error("Errore recupero utente:", err);
@@ -485,36 +476,31 @@
             } else {
                 authSection.style.display = "block";
                 loggedInControls.style.display = "none";
-                previewName.textContent = "Gnomo Standard";
             }
         });
 
-        saveProfileBtn.addEventListener("click", async () => {
+        // Salvataggio dell'avatar scelto su Firestore
+        saveAvatarBtn.addEventListener("click", async () => {
             const user = auth.currentUser;
-            if (!user) return;
+            if (!user) {
+                showAlert("Prima devi effettuare l'accesso o registrarti!", "error", true);
+                return;
+            }
 
             try {
                 const userDocRef = doc(db, "users", user.uid);
                 await updateDoc(userDocRef, {
-                    avatarUrl: newAvatarInput.value.trim()
+                    avatar: selectedAvatar
                 });
-                showAlert("Avatar aggiornato con successo!", "success", true);
+                showAlert(`Avatar ${selectedAvatar.toUpperCase()} salvato con successo!`, "success", true);
             } catch (err) {
                 console.error(err);
-                showAlert("Errore durante il salvataggio.", "error", true);
+                showAlert("Errore durante il salvataggio dell'avatar.", "error", true);
             }
         });
 
         logoutBtn.addEventListener("click", () => {
             signOut(auth);
-        });
-
-        // Interattività visiva temporanea per la griglia del camerino
-        document.querySelectorAll('.gnome-slot').forEach(slot => {
-            slot.addEventListener('click', () => {
-                document.querySelectorAll('.gnome-slot').forEach(s => s.classList.remove('selected'));
-                slot.classList.add('selected');
-            });
         });
     </script>
 </body>
