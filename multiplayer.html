@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplayer - Battaglie Gnomiche</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logobattagliegnomiche.png">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #07160d;
+            --container-bg: rgba(11, 38, 22, 0.92);
+            --border-green: #1e5631;
+            --accent-green: #4c9a2a;
+            --text-light: #e8f5e9;
+            --text-muted: #a5d6a7;
+            --danger-color: #d32f2f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at center, #113820 0%, var(--bg-dark) 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* SEZIONE SELEZIONE STANZE */
+        #room-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+            justify-content: center;
+        }
+
+        .room-card {
+            flex: 1;
+            background: var(--container-bg);
+            border: 2px solid var(--border-green);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .room-card:hover {
+            border-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .room-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--accent-green);
+            margin-bottom: 5px;
+        }
+
+        /* SCHERMATA DI GIOCO DELLA STANZA (Nascosta finché non si entra) */
+        #game-room {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .room-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 15, 9, 0.8);
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 1px solid var(--border-green);
+        }
+
+        .room-title-text {
+            font-family: 'Cinzel', serif;
+            font-weight: bold;
+            color: var(--accent-green);
+        }
+
+        /* ARENA DI GIOCO */
+        .arena {
+            width: 100%;
+            height: 280px;
+            background: #041008;
+            border: 4px solid var(--border-green);
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .arena-instructions {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.6);
+            padding: 3px 10px;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* GIOCATORE NELL'ARENA */
+        .player-sprite {
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: left 0.1s linear, top 0.1s linear;
+            text-align: center;
+        }
+
+        .player-sprite img {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            border-radius: 50%;
+            border: 2px solid var(--accent-green);
+            background: #0b2616;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .player-sprite.targetable:hover img {
+            border-color: var(--danger-color);
+            transform: scale(1.15);
+            box-shadow: 0 0 10px var(--danger-color);
+        }
+
+        .player-name-tag {
+            font-size: 0.65rem;
+            background: rgba(0,0,0,0.7);
+            color: var(--text-light);
+            padding: 1px 4px;
+            border-radius: 4px;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        /* INVENTARIO A 5 SLOT */
+        .inventory-section {
+            background: rgba(5, 15, 9, 0.8);
+            border: 1px solid var(--border-green);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .inventory-title {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .inventory-slots {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .inv-slot {
+            width: 50px;
+            height: 50px;
+            background: rgba(11, 38, 22, 0.6);
+            border: 2px solid var(--border-green);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            cursor: default;
+            position: relative;
+        }
+
+        .inv-slot.interactive {
+            cursor: pointer;
+            border-color: var(--accent-green);
+        }
+
+        .inv-slot.interactive:hover {
+            background: rgba(76, 154, 42, 0.3);
+            transform: scale(1.05);
+        }
+
+        .inv-slot.active-tool {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 8px var(--danger-color);
+            background: rgba(211, 47, 47, 0.2);
+        }
+
+        /* CHAT DI STANZA */
+        .chat-container {
+            background: rgba(5, 15, 9, 0.8);
+            border: 1px solid var(--border-green);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            height: 140px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            padding-right: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .chat-msg {
+            word-break: break-word;
+        }
+
+        .chat-msg span {
+            color: var(--accent-green);
+            font-weight: bold;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 8px 10px;
+            background: rgba(7, 22, 13, 0.6);
+            border: 1px solid var(--border-green);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 0.85rem;
+            outline: none;
+        }
+
+        .chat-input-area input:focus {
+            border-color: var(--accent-green);
+        }
+
+        /* PULSANTI E LINK */
+        .btn {
+            padding: 8px 14px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #4c9a2a 0%, #2e6914 100%);
+            border: 1px solid #62c436;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn:hover {
+            filter: brightness(1.15);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #d32f2f 0%, #8e0000 100%);
+            border-color: #f44336;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="logobattagliegnomiche.png" alt="Logo" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
+        <h1>Stanze Multiplayer</h1>
+        <p class="subtitle">Scegli una stanza in cui entrare</p>
+    </header>
+
+    <!-- 1. SELETTORE DELLE 2 STANZE -->
+    <div id="room-selector">
+        <div class="room-card" onclick="joinRoom('stanza_1')">
+            <h3>Stanza 1</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Bosco Sanguinario</p>
+        </div>
+        <div class="room-card" onclick="joinRoom('stanza_2')">
+            <h3>Stanza 2</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Radura Segreta</p>
+        </div>
+    </div>
+
+    <!-- 2. INTERFACCIA DELLA STANZA ATTIVA -->
+    <div id="game-room">
+        <div class="room-header-bar">
+            <div>
+                <span class="room-title-text" id="active-room-name">Stanza</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 10px;" id="online-count">Giocatori: 0</span>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <!-- Pulsante svuota stanza visibile solo all'UID mod -->
+                <button class="btn btn-danger" id="clear-room-btn" style="display: none;" onclick="clearRoom()">Svuota Stanza</button>
+                <button class="btn" onclick="leaveRoom()">Torna alle Stanze</button>
+            </div>
+        </div>
+
+        <!-- ARENA -->
+        <div class="arena" id="game-arena">
+            <div class="arena-instructions">Clicca nell'arena per muoverti</div>
+            <!-- I giocatori appariranno qui dinamicamente -->
+        </div>
+
+        <!-- INVENTARIO 5 SLOT -->
+        <div class="inventory-section">
+            <div class="inventory-title">Inventario</div>
+            <div class="inventory-slots">
+                <div class="inv-slot" id="slot-1" title="Slot vuoto"></div>
+                <div class="inv-slot" id="slot-2" title="Slot vuoto"></div>
+                <div class="inv-slot" id="slot-3" title="Slot vuoto"></div>
+                <div class="inv-slot" id="slot-4" title="Slot vuoto"></div>
+                <div class="inv-slot" id="slot-5" title="Slot vuoto"></div>
+            </div>
+        </div>
+
+        <!-- CHAT DI STANZA -->
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-msg" style="color: var(--text-muted);">Benvenuto nella chat della stanza!</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Scrivi un messaggio..." maxlength="100">
+                <button class="btn" onclick="sendChatMessage()">Invia</button>
+            </div>
+        </div>
+    </div>
+
+    <a href="gioca.html" class="back-link">&larr; Torna a Indietro</a>
+
+    <!-- SCRIPT FIREBASE E LOGICA MULTIPLAYER -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            setDoc, 
+            updateDoc, 
+            onSnapshot, 
+            collection, 
+            addDoc, 
+            query, 
+            orderBy, 
+            limit, 
+            deleteDoc, 
+            getDocs 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBJHChFOVuJBIjtG4y4HxNSrMJqSgiTvo0",
+            authDomain: "battaglie-gnomiche.firebaseapp.com",
+            projectId: "battaglie-gnomiche",
+            storageBucket: "battaglie-gnomiche.firebasestorage.app",
+            messagingSenderId: "991921148764",
+            appId: "1:991921148764:web:8cf3c3a2b41418cdbce799",
+            measurementId: "G-S4SWMGVPWN"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const MOD_UID = "At37OxKBwBRPN7VrS4Kh4ihzIKZ2";
+
+        let currentUserData = null;
+        let currentRoomId = null;
+        let unsubscribePlayers = null;
+        let unsubscribeChat = null;
+        let hammerActive = false; // Stato attivazione martello mod
+
+        // Controllo autenticazione iniziale
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                alert("Devi effettuare l'accesso per giocare in multiplayer!");
+                window.location.href = "account.html";
+                return;
+            }
+
+            try {
+                const userDoc = await getDoc(doc(db, "users", user.uid));
+                if (userDoc.exists()) {
+                    currentUserData = userDoc.data();
+                    if (currentUserData.isBanned) {
+                        alert("Sei stato bannato.");
+                        window.location.href = "index.html";
+                        return;
+                    }
+
+                    // Se è l'utente MOD, inseriamo il martello nel primo slot inventario!
+                    if (user.uid === MOD_UID) {
+                        const slot1 = document.getElementById("slot-1");
+                        slot1.innerHTML = "🔨";
+                        slot1.title = "Martello Mod: Clicca per attivare ed espellere un giocatore";
+                        slot1.classList.add("interactive");
+                        slot1.onclick = toggleHammer;
+
+                        // Mostra anche il tasto per svuotare la stanza
+                        document.getElementById("clear-room-btn").style.display = "block";
+                    }
+                }
+            } catch (err) {
+                console.error("Errore caricamento dati utente:", err);
+            }
+        });
+
+        // Funzione per attivare/disattivare il martello
+        window.toggleHammer = function() {
+            hammerActive = !hammerActive;
+            const slot1 = document.getElementById("slot-1");
+            if (hammerActive) {
+                slot1.classList.add("active-tool");
+                alert("Martello attivato! Clicca su un giocatore nell'arena per espellerlo.");
+            } else {
+                slot1.classList.remove("active-tool");
+            }
+        };
+
+        // Entra in una stanza
+        window.joinRoom = async function(roomId) {
+            if (!currentUserData) {
+                alert("Caricamento dati in corso, attendi un secondo...");
+                return;
+            }
+
+            currentRoomId = roomId;
+            document.getElementById("room-selector").style.display = "none";
+            document.getElementById("game-room").style.display = "flex";
+            document.getElementById("active-room-name").textContent = roomId === 'stanza_1' ? "Stanza 1 - Bosco Sanguinario" : "Stanza 2 - Radura Segreta";
+
+            const user = auth.currentUser;
+            const playerDocRef = doc(db, "rooms", currentRoomId, "players", user.uid);
+
+            // Registra la posizione iniziale del giocatore nell'arena
+            await setDoc(playerDocRef, {
+                uid: user.uid,
+                username: currentUserData.username,
+                avatar: currentUserData.avatar || "verde",
+                x: 50, // percentuale nell'arena
+                y: 50,
+                lastActive: new Date()
+            });
+
+            // Ascolta i giocatori nella stanza in tempo reale
+            listenToPlayers();
+            // Ascolta la chat della stanza
+            listenToChat();
+        };
+
+        // Lascia la stanza
+        window.leaveRoom = async function() {
+            if (currentRoomId && auth.currentUser) {
+                try {
+                    await deleteDoc(doc(db, "rooms", currentRoomId, "players", auth.currentUser.uid));
+                } catch(e) {}
+            }
+            if (unsubscribePlayers) unsubscribePlayers();
+            if (unsubscribeChat) unsubscribeChat();
+
+            currentRoomId = null;
+            hammerActive = false;
+            document.getElementById("slot-1").classList.remove("active-tool");
+            document.getElementById("game-room").style.display = "none";
+            document.getElementById("room-selector").style.display = "flex";
+        };
+
+        // Muoviti cliccando nell'arena
+        const arena = document.getElementById("game-arena");
+        arena.addEventListener("click", async (e) => {
+            if (!currentRoomId || !auth.currentUser) return;
+            // Se clicca direttamente su un altro giocatore con il martello attivo, gestisce il ban/espulsione
+            if (e.target.closest('.player-sprite')) return;
+
+            const rect = arena.getBoundingClientRect();
+            const x = Math.max(5, Math.min(95, ((e.clientX - rect.left) / rect.width) * 100));
+            const y = Math.max(5, Math.min(95, ((e.clientY - rect.top) / rect.height) * 100));
+
+            const playerDocRef = doc(db, "rooms", currentRoomId, "players", auth.currentUser.uid);
+            await updateDoc(playerDocRef, { x, y });
+        });
+
+        // Sincronizzazione giocatori nell'arena
+        function listenToPlayers() {
+            const playersColRef = collection(db, "rooms", currentRoomId, "players");
+            unsubscribePlayers = onSnapshot(playersColRef, (snapshot) => {
+                // Pulisci l'arena mantenendo solo le istruzioni
+                arena.innerHTML = '<div class="arena-instructions">Clicca nell\'arena per muoverti</div>';
+                let count = 0;
+
+                snapshot.forEach((docSnap) => {
+                    const p = docSnap.data();
+                    count++;
+
+                    const sprite = document.createElement("div");
+                    sprite.className = "player-sprite";
+                    if (auth.currentUser && p.uid !== auth.currentUser.uid) {
+                        sprite.classList.add("targetable");
+                    }
+                    sprite.style.left = `${p.x}%`;
+                    sprite.style.top = `${p.y}%`;
+
+                    // Sceglie l'immagine in base al tipo salvato
+                    const imgSrc = p.avatar === 'rosso' ? 'gnomorosso.jpeg' : 'gnomoverde.png';
+
+                    sprite.innerHTML = `
+                        <img src="${imgSrc}" alt="${p.username}">
+                        <div class="player-name-tag">${p.username}</div>
+                    `;
+
+                    // Azione del martello se clicchi su un altro utente
+                    sprite.addEventListener("click", async (ev) => {
+                        ev.stopPropagation();
+                        const currentUser = auth.currentUser;
+                        if (currentUser && currentUser.uid === MOD_UID && hammerActive) {
+                            if (confirm(`Vuoi espellere il giocatore ${p.username} dalla stanza/partita?`)) {
+                                // Cancella il giocatore dalla stanza di Firestore
+                                await deleteDoc(doc(db, "rooms", currentRoomId, "players", p.uid));
+                                alert(`Giocatore ${p.username} espulso!`);
+                            }
+                        }
+                    });
+
+                    arena.appendChild(sprite);
+                });
+
+                document.getElementById("online-count").textContent = `Giocatori: ${count}`;
+            });
+        }
+
+        // Svuota stanza completa (riservato al mod UID)
+        window.clearRoom = async function() {
+            if (!currentRoomId) return;
+            if (confirm("Sei sicuro di voler svuotare completamente questa stanza?")) {
+                const querySnapshot = await getDocs(collection(db, "rooms", currentRoomId, "players"));
+                querySnapshot.forEach(async (d) => {
+                    await deleteDoc(d.ref);
+                });
+                alert("Stanza svuotata!");
+            }
+        };
+
+        // Gestione Chat
+        window.sendChatMessage = async function() {
+            const input = document.getElementById("chat-input");
+            const text = input.value.trim();
+            if (!text || !currentRoomId || !currentUserData) return;
+
+            await addDoc(collection(db, "rooms", currentRoomId, "chat"), {
+                username: currentUserData.username,
+                message: text,
+                timestamp: new Date()
+            });
+
+            input.value = "";
+        };
+
+        function listenToChat() {
+            const chatColRef = collection(db, "rooms", currentRoomId, "chat");
+            const q = query(chatColRef, orderBy("timestamp", "asc"), limit(30));
+
+            unsubscribeChat = onSnapshot(q, (snapshot) => {
+                const chatMessages = document.getElementById("chat-messages");
+                chatMessages.innerHTML = "";
+                snapshot.forEach((docSnap) => {
+                    const msg = docSnap.data();
+                    const div = document.createElement("div");
+                    div.className = "chat-msg";
+                    div.innerHTML = `<span>${msg.username}:</span> ${msg.message}`;
+                    chatMessages.appendChild(div);
+                });
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
+    </script>
+</body>
+</html>
