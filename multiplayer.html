@@ -1,12 +1,13 @@
-<!DOCTYPE html>
+<!DOCT<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Multiplayer - Battaglie Gnomiche</title>
-    <!-- Favicon -->
+    <!-- Favicon e Manifest -->
     <link rel="icon" type="image/png" href="logobattagliegnomiche.png">
     <link rel="manifest" href="manifest.json">
+    
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     
@@ -55,7 +56,7 @@
             color: var(--text-muted);
         }
 
-        /* SEZIONE SELEZIONE STANZE */
+        /* SELEZIONE STANZE */
         #room-selector {
             display: flex;
             gap: 15px;
@@ -88,13 +89,13 @@
             margin-bottom: 5px;
         }
 
-        /* SCHERMATA DI GIOCO DELLA STANZA (Nascosta finché non si entra) */
+        /* SCHERMATA DI GIOCO DELLA STANZA */
         #game-room {
             display: none;
             width: 100%;
             max-width: 600px;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .room-header-bar {
@@ -113,10 +114,10 @@
             color: var(--accent-green);
         }
 
-        /* ARENA DI GIOCO */
+        /* ARENA DI GIOCO STILE UNDERTALE */
         .arena {
             width: 100%;
-            height: 280px;
+            height: 260px;
             background: #041008;
             border: 4px solid var(--border-green);
             border-radius: 15px;
@@ -127,27 +128,29 @@
 
         .arena-instructions {
             position: absolute;
-            top: 10px;
+            top: 8px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             background: rgba(0,0,0,0.6);
-            padding: 3px 10px;
+            padding: 2px 8px;
             border-radius: 20px;
             pointer-events: none;
             z-index: 5;
         }
 
-        /* GIOCATORE NELL'ARENA */
+        /* PERSONAGGIO DALL'ALTO */
         .player-sprite {
             position: absolute;
-            width: 45px;
-            height: 45px;
             transform: translate(-50%, -50%);
             cursor: pointer;
-            transition: left 0.1s linear, top 0.1s linear;
+            transition: left 0.08s linear, top 0.08s linear;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2;
         }
 
         .player-sprite img {
@@ -157,7 +160,7 @@
             border-radius: 50%;
             border: 2px solid var(--accent-green);
             background: #0b2616;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.6);
         }
 
         .player-sprite.targetable:hover img {
@@ -166,14 +169,27 @@
             box-shadow: 0 0 10px var(--danger-color);
         }
 
-        .player-name-tag {
-            font-size: 0.65rem;
-            background: rgba(0,0,0,0.7);
-            color: var(--text-light);
-            padding: 1px 4px;
-            border-radius: 4px;
+        .player-hud {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--border-green);
+            border-radius: 5px;
+            padding: 1px 5px;
+            margin-top: 2px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             white-space: nowrap;
-            display: inline-block;
+        }
+
+        .player-name-tag {
+            font-size: 0.6rem;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .player-hearts {
+            font-size: 0.55rem;
+            letter-spacing: 0.5px;
         }
 
         /* INVENTARIO A 5 SLOT */
@@ -181,34 +197,33 @@
             background: rgba(5, 15, 9, 0.8);
             border: 1px solid var(--border-green);
             border-radius: 10px;
-            padding: 10px;
+            padding: 8px 10px;
         }
 
         .inventory-title {
             font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .inventory-slots {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             justify-content: center;
         }
 
         .inv-slot {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             background: rgba(11, 38, 22, 0.6);
             border: 2px solid var(--border-green);
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             cursor: default;
-            position: relative;
         }
 
         .inv-slot.interactive {
@@ -224,10 +239,10 @@
         .inv-slot.active-tool {
             border-color: var(--danger-color);
             box-shadow: 0 0 8px var(--danger-color);
-            background: rgba(211, 47, 47, 0.2);
+            background: rgba(211, 47, 47, 0.25);
         }
 
-        /* CHAT DI STANZA */
+        /* CHAT */
         .chat-container {
             background: rgba(5, 15, 9, 0.8);
             border: 1px solid var(--border-green);
@@ -235,7 +250,7 @@
             padding: 10px;
             display: flex;
             flex-direction: column;
-            height: 140px;
+            height: 130px;
         }
 
         .chat-messages {
@@ -243,7 +258,7 @@
             overflow-y: auto;
             font-size: 0.8rem;
             padding-right: 5px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             flex-direction: column;
             gap: 4px;
@@ -265,7 +280,7 @@
 
         .chat-input-area input {
             flex: 1;
-            padding: 8px 10px;
+            padding: 7px 10px;
             background: rgba(7, 22, 13, 0.6);
             border: 1px solid var(--border-green);
             border-radius: 8px;
@@ -278,11 +293,11 @@
             border-color: var(--accent-green);
         }
 
-        /* PULSANTI E LINK */
+        /* PULSANTI */
         .btn {
-            padding: 8px 14px;
+            padding: 7px 12px;
             font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: #ffffff;
             background: linear-gradient(135deg, #4c9a2a 0%, #2e6914 100%);
@@ -317,41 +332,39 @@
 <body>
 
     <header>
-        <img src="logobattagliegnomiche.png" alt="Logo" style="width: 50px; height: 50px; object-fit: contain; margin-bottom: 5px;">
+        <img src="logobattagliegnomiche.png" alt="Logo" style="width: 45px; height: 45px; object-fit: contain; margin-bottom: 3px;">
         <h1>Stanze Multiplayer</h1>
         <p class="subtitle">Scegli una stanza in cui entrare</p>
     </header>
 
-    <!-- 1. SELETTORE DELLE 2 STANZE -->
+    <!-- SELETTORE DELLE 2 STANZE -->
     <div id="room-selector">
         <div class="room-card" onclick="joinRoom('stanza_1')">
             <h3>Stanza 1</h3>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Bosco Sanguinario</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Bosco Sanguinario</p>
         </div>
         <div class="room-card" onclick="joinRoom('stanza_2')">
             <h3>Stanza 2</h3>
-            <p style="font-size: 0.8rem; color: var(--text-muted);">Radura Segreta</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">Radura Segreta</p>
         </div>
     </div>
 
-    <!-- 2. INTERFACCIA DELLA STANZA ATTIVA -->
+    <!-- SCHERMATA DI GIOCO -->
     <div id="game-room">
         <div class="room-header-bar">
             <div>
                 <span class="room-title-text" id="active-room-name">Stanza</span>
-                <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 10px;" id="online-count">Giocatori: 0</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 8px;" id="online-count">Giocatori: 0</span>
             </div>
-            <div style="display: flex; gap: 8px;">
-                <!-- Pulsante svuota stanza visibile solo all'UID mod -->
+            <div style="display: flex; gap: 6px;">
                 <button class="btn btn-danger" id="clear-room-btn" style="display: none;" onclick="clearRoom()">Svuota Stanza</button>
-                <button class="btn" onclick="leaveRoom()">Torna alle Stanze</button>
+                <button class="btn" onclick="leaveRoom()">Esci</button>
             </div>
         </div>
 
         <!-- ARENA -->
         <div class="arena" id="game-arena">
             <div class="arena-instructions">Clicca nell'arena per muoverti</div>
-            <!-- I giocatori appariranno qui dinamicamente -->
         </div>
 
         <!-- INVENTARIO 5 SLOT -->
@@ -359,14 +372,14 @@
             <div class="inventory-title">Inventario</div>
             <div class="inventory-slots">
                 <div class="inv-slot" id="slot-1" title="Slot vuoto"></div>
-                <div class="inv-slot" id="slot-2" title="Slot vuoto"></div>
-                <div class="inv-slot" id="slot-3" title="Slot vuoto"></div>
-                <div class="inv-slot" id="slot-4" title="Slot vuoto"></div>
-                <div class="inv-slot" id="slot-5" title="Slot vuoto"></div>
+                <div class="inv-slot" id="slot-2"></div>
+                <div class="inv-slot" id="slot-3"></div>
+                <div class="inv-slot" id="slot-4"></div>
+                <div class="inv-slot" id="slot-5"></div>
             </div>
         </div>
 
-        <!-- CHAT DI STANZA -->
+        <!-- CHAT -->
         <div class="chat-container">
             <div class="chat-messages" id="chat-messages">
                 <div class="chat-msg" style="color: var(--text-muted);">Benvenuto nella chat della stanza!</div>
@@ -378,9 +391,9 @@
         </div>
     </div>
 
-    <a href="gioca.html" class="back-link">&larr; Torna a Indietro</a>
+    <a href="gioca.html" class="back-link">&larr; Indietro</a>
 
-    <!-- SCRIPT FIREBASE E LOGICA MULTIPLAYER -->
+    <!-- SCRIPT FIREBASE E LOGICA -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -420,12 +433,11 @@
         let currentRoomId = null;
         let unsubscribePlayers = null;
         let unsubscribeChat = null;
-        let hammerActive = false; // Stato attivazione martello mod
+        let hammerActive = false;
 
-        // Controllo autenticazione iniziale
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
-                alert("Devi effettuare l'accesso per giocare in multiplayer!");
+                alert("Devi effettuare l'accesso per giocare!");
                 window.location.href = "account.html";
                 return;
             }
@@ -440,39 +452,36 @@
                         return;
                     }
 
-                    // Se è l'utente MOD, inseriamo il martello nel primo slot inventario!
+                    // Se è l'utente MOD, inserisce il martello nel primo slot
                     if (user.uid === MOD_UID) {
                         const slot1 = document.getElementById("slot-1");
                         slot1.innerHTML = "🔨";
-                        slot1.title = "Martello Mod: Clicca per attivare ed espellere un giocatore";
+                        slot1.title = "Martello Mod: Clicca per attivare e colpire un giocatore";
                         slot1.classList.add("interactive");
                         slot1.onclick = toggleHammer;
 
-                        // Mostra anche il tasto per svuotare la stanza
                         document.getElementById("clear-room-btn").style.display = "block";
                     }
                 }
             } catch (err) {
-                console.error("Errore caricamento dati utente:", err);
+                console.error("Errore utente:", err);
             }
         });
 
-        // Funzione per attivare/disattivare il martello
         window.toggleHammer = function() {
             hammerActive = !hammerActive;
             const slot1 = document.getElementById("slot-1");
             if (hammerActive) {
                 slot1.classList.add("active-tool");
-                alert("Martello attivato! Clicca su un giocatore nell'arena per espellerlo.");
+                alert("Martello attivato! Clicca su un giocatore nell'arena per colpirlo.");
             } else {
                 slot1.classList.remove("active-tool");
             }
         };
 
-        // Entra in una stanza
         window.joinRoom = async function(roomId) {
             if (!currentUserData) {
-                alert("Caricamento dati in corso, attendi un secondo...");
+                alert("Attendere il caricamento dei dati utente...");
                 return;
             }
 
@@ -484,23 +493,20 @@
             const user = auth.currentUser;
             const playerDocRef = doc(db, "rooms", currentRoomId, "players", user.uid);
 
-            // Registra la posizione iniziale del giocatore nell'arena
             await setDoc(playerDocRef, {
                 uid: user.uid,
                 username: currentUserData.username,
                 avatar: currentUserData.avatar || "verde",
-                x: 50, // percentuale nell'arena
+                x: 50,
                 y: 50,
+                hearts: 3, // 3 cuori iniziali stile Undertale
                 lastActive: new Date()
             });
 
-            // Ascolta i giocatori nella stanza in tempo reale
             listenToPlayers();
-            // Ascolta la chat della stanza
             listenToChat();
         };
 
-        // Lascia la stanza
         window.leaveRoom = async function() {
             if (currentRoomId && auth.currentUser) {
                 try {
@@ -517,11 +523,9 @@
             document.getElementById("room-selector").style.display = "flex";
         };
 
-        // Muoviti cliccando nell'arena
         const arena = document.getElementById("game-arena");
         arena.addEventListener("click", async (e) => {
             if (!currentRoomId || !auth.currentUser) return;
-            // Se clicca direttamente su un altro giocatore con il martello attivo, gestisce il ban/espulsione
             if (e.target.closest('.player-sprite')) return;
 
             const rect = arena.getBoundingClientRect();
@@ -532,11 +536,9 @@
             await updateDoc(playerDocRef, { x, y });
         });
 
-        // Sincronizzazione giocatori nell'arena
         function listenToPlayers() {
             const playersColRef = collection(db, "rooms", currentRoomId, "players");
             unsubscribePlayers = onSnapshot(playersColRef, (snapshot) => {
-                // Pulisci l'arena mantenendo solo le istruzioni
                 arena.innerHTML = '<div class="arena-instructions">Clicca nell\'arena per muoverti</div>';
                 let count = 0;
 
@@ -552,23 +554,30 @@
                     sprite.style.left = `${p.x}%`;
                     sprite.style.top = `${p.y}%`;
 
-                    // Sceglie l'immagine in base al tipo salvato
+                    const currentHearts = p.hearts !== undefined ? p.hearts : 3;
+                    const heartsString = '❤️'.repeat(Math.max(0, currentHearts)) + '🖤'.repeat(Math.max(0, 3 - currentHearts));
                     const imgSrc = p.avatar === 'rosso' ? 'gnomorosso.jpeg' : 'gnomoverde.png';
 
                     sprite.innerHTML = `
                         <img src="${imgSrc}" alt="${p.username}">
-                        <div class="player-name-tag">${p.username}</div>
+                        <div class="player-hud">
+                            <span class="player-name-tag">${p.username}</span>
+                            <div class="player-hearts">${heartsString}</div>
+                        </div>
                     `;
 
-                    // Azione del martello se clicchi su un altro utente
+                    // Interazione martello mod sul giocatore
                     sprite.addEventListener("click", async (ev) => {
                         ev.stopPropagation();
                         const currentUser = auth.currentUser;
                         if (currentUser && currentUser.uid === MOD_UID && hammerActive) {
-                            if (confirm(`Vuoi espellere il giocatore ${p.username} dalla stanza/partita?`)) {
-                                // Cancella il giocatore dalla stanza di Firestore
+                            let newHearts = currentHearts - 1;
+                            if (newHearts > 0) {
+                                await updateDoc(doc(db, "rooms", currentRoomId, "players", p.uid), { hearts: newHearts });
+                                alert(`Hai colpito ${p.username}! Cuori rimanenti: ${newHearts}`);
+                            } else {
                                 await deleteDoc(doc(db, "rooms", currentRoomId, "players", p.uid));
-                                alert(`Giocatore ${p.username} espulso!`);
+                                alert(`${p.username} ha terminato i cuori ed è stato espulso!`);
                             }
                         }
                     });
@@ -580,19 +589,17 @@
             });
         }
 
-        // Svuota stanza completa (riservato al mod UID)
         window.clearRoom = async function() {
             if (!currentRoomId) return;
-            if (confirm("Sei sicuro di voler svuotare completamente questa stanza?")) {
+            if (confirm("Vuoi davvero svuotare la stanza?")) {
                 const querySnapshot = await getDocs(collection(db, "rooms", currentRoomId, "players"));
                 querySnapshot.forEach(async (d) => {
                     await deleteDoc(d.ref);
                 });
-                alert("Stanza svuotata!");
+                alert("Stanza svuotata.");
             }
         };
 
-        // Gestione Chat
         window.sendChatMessage = async function() {
             const input = document.getElementById("chat-input");
             const text = input.value.trim();
